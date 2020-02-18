@@ -13,7 +13,7 @@ class MaxSubArray:
         """
         构造函数
         """
-        self._array = [-2,1,-3,4,-1,2,1,-5,4]
+        self._array = [-2,-1,-3,-4,-1,-2,-1,-5,-4] #[-2,1,-3,4,-1,2,1,-5,4]
         self._result = self._array[0]
 
 
@@ -26,11 +26,20 @@ class MaxSubArray:
                 sum += i
             self._result = max(self._result, sum)
 
+    def tanxin(self):
+        sum = 0
+        for i in self._array:
+            sum += i
+            self._result = max(self._result, sum)
+            if sum < 0:
+                sum = 0
+
     @property
     def result(self):
         return self._result
 
 if __name__ == '__main__':
     m = MaxSubArray()
-    m.dongtaiguihua()
+    # m.dongtaiguihua()
+    m.tanxin()
     print(m.result)
