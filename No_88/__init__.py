@@ -30,12 +30,18 @@ class Merg:
                 return self._lis1.pop(0)
             else:
                 return self._lis2.pop(0)
-
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type == Exception:
+            print('exit')
+            return True
 
 
 if __name__ == '__main__':
     lis1 = [1, 2, 3, 5]
     lis2 = [2, 5, 6]
-    m = Merg(lis1=lis1, lis2=lis2)
-    for i in m:
-        print(i)
+    with Merg(lis1=lis1, lis2=lis2) as m:
+        for i in m:
+            print(i)
+        raise Exception
