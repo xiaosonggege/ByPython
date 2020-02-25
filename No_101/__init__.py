@@ -33,7 +33,6 @@ class BiTreesProperty:
         stack.append(instance.__dict__[self._name])
         BiTreesProperty.build(value, stack)
 
-
     @staticmethod
     def build(value, stack):
         # stack[0].data = value.pop(0)
@@ -47,8 +46,6 @@ class BiTreesProperty:
                 stack.append(stack[0].rchild)
             stack.pop(0)
             BiTreesProperty.build(value, stack)
-
-
 
 class BiTree:
     def __init__(self, data=0, lchild=None, rchild=None):
@@ -67,7 +64,6 @@ class BiTrees:
     def __call__(self, *args, **kwargs):
         self.root = args
         return self.root
-
 
 if __name__ == '__main__':
     tree = BiTrees()
