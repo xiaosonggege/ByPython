@@ -10,8 +10,9 @@
 '''
 
 
-class Name:
-    pass
+def issymmetric(root):
+    stack = []
+
 
 
 if __name__ == '__main__':

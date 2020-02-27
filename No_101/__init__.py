@@ -31,15 +31,20 @@ class BiTreesProperty:
         BiTreesProperty.build(value, stack)
     @staticmethod
     def build(value, stack):
-        # stack[0].data = value.pop(0)
         if len(value):
             stack[0].data = value.pop(0)
             if len(value) > len(stack[1:]):
-                stack[0].lchild = BiTree()
-                stack.append(stack[0].lchild)
+                if value[0] != 'None':
+                    stack[0].lchild = BiTree()
+                    stack.append(stack[0].lchild)
+                else:
+                    value.pop(0)
             if len(value) > len(stack[1:]):
-                stack[0].rchild = BiTree()
-                stack.append(stack[0].rchild)
+                if value[0] != 'None':
+                    stack[0].rchild = BiTree()
+                    stack.append(stack[0].rchild)
+                else:
+                    value.pop(0)
             stack.pop(0)
             BiTreesProperty.build(value, stack)
 
@@ -60,6 +65,10 @@ class BiTrees:
     def __call__(self, *args, **kwargs):
         self.root = args
         return self.root
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return True
     def __iter__(self):
         result = []
         def zhongxu(node):
@@ -71,11 +80,34 @@ class BiTrees:
                     zhongxu(node.rchild)
         zhongxu(self._root)
         return (i for i in result)
+    def isSymmetric(self):
+        def judge(nodel:BiTree, noder:BiTree):
+            if not nodel and noder or nodel and not noder: # 如果两节点有一个为空，一个非空
+                return 0
+            elif not nodel and not noder: # 两个节点均为空
+                return 1
+            else: # 两节点均非空
+                if nodel.data != noder.data: # 如果两节点均非空但值不一样
+                    return 0
+                else:  # 两节点值一样，则递归判断两节点的左子树和右子树
+                    result = judge(nodel=nodel.lchild, noder=noder.rchild)
+                    result *= judge(nodel=nodel.rchild, noder=noder.lchild)
+                    return result
+
+        return judge(self._root.lchild, self._root.rchild)
+
 
 if __name__ == '__main__':
-    tree = BiTrees()
-    lis = [1, 2, 2, 3, 4, 4, 3]
-    root = tree(*lis)
-    for i in tree:
-        print(i)
+    # tree = BiTrees()
+    lis = [1, 2, 2, 3, None, None, 3]
+    with BiTrees() as tree:
+        root = tree(*lis)
+        import sys
+        sys.stdout.write('中序遍历结果为:')
+        for i in tree:
+            print(i, end=' ')
+        result = tree.isSymmetric()
+        sys.stdout.write('\n是否为对称二叉树:')
+        print(result)
+
 
