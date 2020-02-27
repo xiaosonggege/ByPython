@@ -14,7 +14,6 @@ import copy
 class BiTreeProperty:
     def __init__(self, name):
         self._name = '_' + name
-
     def __get__(self, instance, owner):
         return instance.__dict__[self._name]
     def __set__(self, instance, value):
@@ -23,16 +22,13 @@ class BiTreeProperty:
 class BiTreesProperty:
     def __init__(self, name):
         self._name = '_' + name
-
     def __get__(self, instance, owner):
         return instance.__dict__[self._name]
-
     def __set__(self, instance, value:tuple):
         value = list(value)
         stack = []
         stack.append(instance.__dict__[self._name])
         BiTreesProperty.build(value, stack)
-
     @staticmethod
     def build(value, stack):
         # stack[0].data = value.pop(0)
@@ -64,10 +60,22 @@ class BiTrees:
     def __call__(self, *args, **kwargs):
         self.root = args
         return self.root
+    def __iter__(self):
+        result = []
+        def zhongxu(node):
+            if node:
+                if node.lchild:
+                    zhongxu(node.lchild)
+                result.append(node.data)
+                if node.rchild:
+                    zhongxu(node.rchild)
+        zhongxu(self._root)
+        return (i for i in result)
 
 if __name__ == '__main__':
     tree = BiTrees()
     lis = [1, 2, 2, 3, 4, 4, 3]
     root = tree(*lis)
-    print('root')
+    for i in tree:
+        print(i)
 
