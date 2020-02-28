@@ -99,7 +99,7 @@ class BiTrees:
 
 if __name__ == '__main__':
     # tree = BiTrees()
-    lis = [1, 2, 2, 3, None, None, 3]
+    lis = [1, 2, 2, 3, 'None', 'None', 'None']
     with BiTrees() as tree:
         root = tree(*lis)
         import sys
