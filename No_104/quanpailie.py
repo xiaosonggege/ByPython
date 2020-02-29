@@ -8,6 +8,7 @@
 @file: quanpailie
 @time: 2020/2/28 2:10 下午
 '''
+import copy
 
 class Aproperty:
     def __init__(self, name):
@@ -23,23 +24,27 @@ class A:
         self._list = lis
         self._result = []
     lis = Aproperty('list')
-    low = 0
     def _quanpailie(self, lis, index=0):
-        for i in range(0, len(lis)):
-            lis[0], lis[i] = lis[i], lis[0]
-            if A.low != len(self._list)-1:
-                A.low += 1
-                self._quanpailie(lis, index=A.low)
+        for i in range(index, len(lis)):
+            lis[index], lis[i] = lis[i], lis[index]
+            if index != len(self._list)-1:
+                self._quanpailie(lis, index+1)
             else:
-                self._result.append(lis)
-            lis[0], lis[i] = lis[i], lis[0]
-            A.low = 0
+                self._result.append(copy.deepcopy(lis))
+            lis[index], lis[i] = lis[i], lis[index]
     def __call__(self, *args, **kwargs):
         self._quanpailie(self._list)
         return self._result
+    def __iter__(self):
+        self._quanpailie(self._list)
+        return (i for i in self._result)
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return True
 
 if __name__ == '__main__':
-    l = [1, 2, 3]
-    a = A(l)
-    for i in a():
-        print(i)
+    l = [1, 2, 3, 4]
+    with A(l) as a:
+        for i in a:
+            print(i)
