@@ -30,6 +30,6 @@ class MaxDepth:
         return self._maxdepth(self._tree.root)
 
 if __name__ == '__main__':
-    lis = [1, 2, 2, 'None', 'None', 'None', 'None']
+    lis = [1, 2, 2, 'None', 4, 'None', 'None']
     m = MaxDepth(*lis)
     print(m())

@@ -8,7 +8,7 @@
 @file: __init__.py
 @time: 2020/2/23 10:18 上午
 '''
-from collections import namedtuple
+from collections import namedtuple, Counter
 import copy
 
 class BiTreeProperty:
@@ -31,22 +31,24 @@ class BiTreesProperty:
         BiTreesProperty.build(value, stack)
     @staticmethod
     def build(value, stack):
-        if len(value):
+        flag = 1
+        if value[0] != 'None':
             stack[0].data = value.pop(0)
-            if len(value) > len(stack[1:]):
-                if value[0] != 'None':
-                    stack[0].lchild = BiTree()
+        for i in value:
+            if i != 'None':
+                if not stack[0].lchild and flag: #左子树为空
+                    stack[0].lchild = BiTree(data=i)
                     stack.append(stack[0].lchild)
-                else:
-                    value.pop(0)
-            if len(value) > len(stack[1:]):
-                if value[0] != 'None':
-                    stack[0].rchild = BiTree()
+                elif not stack[0].rchild: #左子树非空，右子树为空
+                    stack[0].rchild = BiTree(data=i)
                     stack.append(stack[0].rchild)
-                else:
-                    value.pop(0)
-            stack.pop(0)
-            BiTreesProperty.build(value, stack)
+                    stack.pop(0) #父节点出队
+                    flag = 1
+            else:
+                if stack[0].lchild: #左子树非空时若遇到None直接出队首位
+                    stack.pop(0)
+                else: #左子树为空时
+                    flag = 0
 
 class BiTree:
     def __init__(self, data=0, lchild=None, rchild=None):
@@ -99,7 +101,7 @@ class BiTrees:
 
 if __name__ == '__main__':
     # tree = BiTrees()
-    lis = [1, 2, 2, 3, 'None', 'None', 'None']
+    lis = [1, 2, 2, 'None', 'None', 'None', 'None']
     with BiTrees() as tree:
         root = tree(*lis)
         import sys
